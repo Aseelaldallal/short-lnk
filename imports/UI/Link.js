@@ -2,6 +2,12 @@ import React, { Component } from 'react';
 import { Accounts } from 'meteor/accounts-base';
 
 class Link extends Component {
+  componentDidMount() {
+    if (!Meteor.user()) {
+      this.props.history.push('/');
+    }
+  }
+
   onLogout = () => {
     console.log('Logout clicked');
     Accounts.logout();

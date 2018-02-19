@@ -11,6 +11,12 @@ class Signup extends Component {
     };
   }
 
+  componentDidMount() {
+    if (Meteor.user()) {
+      this.props.history.push('/links');
+    }
+  }
+
   onSubmit = e => {
     e.preventDefault();
     console.log('Signing up');
