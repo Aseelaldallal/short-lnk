@@ -1,5 +1,6 @@
 // Meteor
 import { meteor } from 'meteor/meteor';
+import { Tracker } from 'meteor/tracker';
 // React
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
@@ -14,16 +15,33 @@ import Login from '../imports/UI/Login';
 
 const history = createBrowserHistory();
 
+const unauthenticatedPages = ['/', '/signup'];
+const authenticatedPages = ['/links'];
+
 const routes = (
   <Router history={history}>
     <Switch>
       <Route exact path="/" component={Login} />
       <Route path="/signup" component={Signup} />
-      <Route path="/link" component={Link} />
+      <Route path="/links" component={Link} />
       <Route path="*" component={NotFound} />
     </Switch>
   </Router>
 );
+
+Tracker.autorun(() => {
+  const isAuthenticated = !!Meteor.userId();
+  console.log('isAuth: ', isAuthenticated);
+  const pathName = history.location.pathname;
+  const isUnauthenticatedPage = unauthenticatedPages.includes(pathName);
+  const isAuthenticatedPage = authenticatedPages.includes(pathName);
+  if (isUnauthenticatedPage && isAuthenticated) {
+    history.push('/links');
+  }
+  if (isAuthenticatedPage && !isAuthenticated) {
+    history.push('/');
+  }
+});
 
 Meteor.startup(() => {
   ReactDOM.render(routes, document.getElementById('app'));

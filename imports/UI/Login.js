@@ -12,6 +12,7 @@ class Login extends Component {
 
   onSubmit = e => {
     e.preventDefault();
+    console.log('logging in');
     let email = this.refs.email.value.trim();
     let password = this.refs.password.value.trim();
     Meteor.loginWithPassword({ email }, password, err => {

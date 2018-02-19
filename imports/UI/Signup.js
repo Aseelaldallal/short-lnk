@@ -13,6 +13,7 @@ class Signup extends Component {
 
   onSubmit = e => {
     e.preventDefault();
+    console.log('Signing up');
     let email = this.refs.email.value.trim();
     let password = this.refs.password.value.trim();
     Accounts.createUser({ email, password }, err => {

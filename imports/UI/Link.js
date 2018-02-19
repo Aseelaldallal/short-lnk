@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import { Accounts } from 'meteor/accounts-base';
 
 class Link extends Component {
   onLogout = () => {
-    this.props.history.push('/');
+    console.log('Logout clicked');
+    Accounts.logout();
   };
 
   render() {
