@@ -1,18 +1,16 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { withTracker } from 'meteor/react-meteor-data';
 // Auth
 import { Accounts } from 'meteor/accounts-base';
 
 class Signup extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      count: 0
-    };
-  }
+  state = {
+    error: ''
+  };
 
-  componentDidMount() {
-    if (Meteor.user()) {
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.user) {
       this.props.history.push('/links');
     }
   }
@@ -23,11 +21,13 @@ class Signup extends Component {
     let email = this.refs.email.value.trim();
     let password = this.refs.password.value.trim();
     Accounts.createUser({ email, password }, err => {
-      console.log('Signup callback', err);
-    });
-
-    this.setState({
-      error: 'Something went wrong.'
+      if (err) {
+        this.setState({
+          error: err.message
+        });
+      } else {
+        this.props.history.push('/links');
+      }
     });
   };
 
@@ -53,4 +53,10 @@ class Signup extends Component {
   }
 }
 
-export default Signup;
+// export default Signup;
+
+export default withTracker(props => {
+  return {
+    user: Meteor.user()
+  };
+})(Signup);
